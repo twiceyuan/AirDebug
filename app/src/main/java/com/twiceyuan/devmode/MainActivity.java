@@ -41,7 +41,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         tv_ip = (TextView) findViewById(R.id.tv_ip);
-        tv_status = (TextView) findViewById(R.id.tv_status);
         et_ip = (EditText) findViewById(R.id.et_ip);
         sw_net = (Switch) findViewById(R.id.sw_net);
 
@@ -80,14 +79,6 @@ public class MainActivity extends Activity {
         et_ip.setText(getLocalHostIp());
         sw_net.setChecked(getNetStatus());
         tv_status.setText("当前状态：" + (getNetStatus() ? "网络调试" : "USB 调试"));
-    }
-
-    public void turnOn(View view) {
-        turn(true);
-    }
-
-    public void turnOff(View view) {
-        turn(false);
     }
 
     private void turn(boolean isOn) {

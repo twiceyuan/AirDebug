@@ -6,6 +6,35 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Switch
+            android:id="@+id/sw_net"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:padding="20dp"
+            android:text="@string/net_status" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:padding="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="turnToDisplaySettings"
+            android:text="@string/turn_to_settings" />
+    </FrameLayout>
+
     <TextView
         android:id="@+id/tv_ip"
         android:layout_width="match_parent"
@@ -15,6 +44,7 @@
         android:textColor="#555"
         android:textSize="18sp" />
 
+
     <EditText
         android:id="@+id/et_ip"
         android:layout_width="wrap_content"
@@ -22,26 +52,5 @@
         android:inputType="text"
         android:paddingLeft="50dp"
         android:paddingRight="50dp" />
-
-    <TextView
-        android:id="@+id/tv_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="20dp"
-        android:textColor="#555"
-        android:textSize="18sp" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="turnOn"
-        android:text="@string/turn_on" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="turnOff"
-        android:text="@string/turn_off" />
 
 </LinearLayout>
