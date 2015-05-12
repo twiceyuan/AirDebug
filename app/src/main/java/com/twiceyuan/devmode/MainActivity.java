@@ -30,7 +30,6 @@ import java.util.Enumeration;
 public class MainActivity extends Activity {
 
     TextView tv_ip;
-    TextView tv_status;
     EditText et_ip;
     Switch sw_net;
     RootManager rootManager = RootManager.getInstance();
@@ -78,7 +77,6 @@ public class MainActivity extends Activity {
         tv_ip.setText("本机 IP：");
         et_ip.setText(getLocalHostIp());
         sw_net.setChecked(getNetStatus());
-        tv_status.setText("当前状态：" + (getNetStatus() ? "网络调试" : "USB 调试"));
     }
 
     private void turn(boolean isOn) {
