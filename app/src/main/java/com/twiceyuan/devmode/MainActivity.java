@@ -16,11 +16,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chrisplus.rootmanager.RootManager;
-import com.chrisplus.rootmanager.container.Result;
-
 import org.apache.http.conn.util.InetAddressUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -32,7 +32,6 @@ public class MainActivity extends Activity {
     TextView tv_ip;
     EditText et_ip;
     Switch sw_net;
-    RootManager rootManager = RootManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +67,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        rootManager.obtainPermission();
         updateStatus();
     }
 
@@ -81,9 +79,10 @@ public class MainActivity extends Activity {
 
     private void turn(boolean isOn) {
         String command = isOn? "setprop service.adb.tcp.port 5555":"setprop service.adb.tcp.port -1";
-        rootManager.runCommand(command);
-        rootManager.runCommand("stop adbd");
-        rootManager.runCommand("start adbd");
+
+        exec(command);
+        exec("stop adbd");
+        exec("start adbd");
         updateStatus();
     }
 
@@ -93,8 +92,8 @@ public class MainActivity extends Activity {
      * @return 是否网络调试
      */
     public boolean getNetStatus() {
-        Result result = rootManager.runCommand("getprop service.adb.tcp.port");
-        return result.getMessage().contains("5555");
+        String result = exec("getprop service.adb.tcp.port");
+        return result.contains("5555");
     }
 
     public String getLocalHostIp() {
@@ -130,5 +129,31 @@ public class MainActivity extends Activity {
         intent.setComponent(cm);
         intent.setAction("android.intent.action.VIEW");
         startActivityForResult(intent, 0);
+    }
+
+    /**
+     * 执行 UNIX 命令
+     * @param command
+     * @return
+     */
+    private String exec(String command) {
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+            int read;
+            char[] buffer = new char[4096];
+            StringBuffer output = new StringBuffer();
+            while ((read = reader.read(buffer)) > 0) {
+                output.append(buffer, 0, read);
+            }
+            reader.close();
+            process.waitFor();
+            return output.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
