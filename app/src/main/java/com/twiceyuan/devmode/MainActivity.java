@@ -5,9 +5,15 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -27,11 +33,16 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Handler.Callback {
 
     TextView tv_ip;
     EditText et_ip;
     Switch sw_net;
+
+    private Handler mHandler = new Handler(this);
+    private WifiStateReceiver receiver = new WifiStateReceiver(mHandler);
+
+    public static final int NETWORK_STATE_CHANGED = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +79,16 @@ public class MainActivity extends Activity {
         });
 
         updateStatus();
+
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        intentFilter.setPriority(1000);
+        registerReceiver(receiver, intentFilter);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void updateStatus() {
         tv_ip.setText("本机 IP：");
-        et_ip.setText(getLocalHostIp());
+        et_ip.setText(isWifiConnected(this) ? getLocalHostIp() : "没有连接局域网");
         sw_net.setChecked(getNetStatus());
     }
 
@@ -123,6 +138,34 @@ public class MainActivity extends Activity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
+
+    /**
+     * 判断 Wi-Fi 网络是否可用
+     * @param context
+     * @return
+     */
+    public boolean isWifiConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mWiFiNetworkInfo = mConnectivityManager
+                    .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (mWiFiNetworkInfo != null) {
+                return mWiFiNetworkInfo.isConnected();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 跳转到系统的显示设置（方便调整屏幕关闭时间，屏幕亮度等。因为非系统应用，没有修改系统设置权限）
+     * @param view
+     */
     public void turnToDisplaySettings(View view) {
         Intent intent = new Intent("/");
         ComponentName cm = new ComponentName("com.android.settings","com.android.settings.DisplaySettings");
@@ -155,5 +198,16 @@ public class MainActivity extends Activity {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+
+        switch (msg.what) {
+            case NETWORK_STATE_CHANGED:
+                updateStatus();
+                break;
+        }
+        return false;
     }
 }
