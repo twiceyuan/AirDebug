@@ -1,10 +1,12 @@
-package com.twiceyuan.devmode;
+package com.twiceyuan.devmode.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Handler;
+
+import com.twiceyuan.devmode.activity.MainActivity;
 
 public class WifiStateReceiver extends BroadcastReceiver {
     private Handler mHandler;

@@ -4,5 +4,23 @@
     <string name="turn_on">打开网络调试</string>
     <string name="turn_off">关闭网络调试</string>
     <string name="net_status">网络调试状态</string>
-    <string name="turn_to_settings">跳转到系统显示设置</string>
+    <string name="turn_to_settings">显示设置</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="action_settings">设置</string>
+    <string name="tv_local_ip">本机 IP：</string>
+    <string name="show_help">查看帮助</string>
+    <string name="title_activity_help">帮助</string>
+
+    <string name="help_content">
+        帮助\n\n
+        本应用仅为 adb over network 的开启程序，如果用户在使用的 ROM 没有相关功能模块或者端口不同，则无法开启，可以尝试手动开启。\n\n
+
+        开启网络调试并连接到局域网后，在编辑框里会显示当前设备在局域网中的 IP 地址（譬如192.168.1.100）。在开发设备的终端中输入：\n\n
+        adb connect mobile_ip\n\n
+        例如：\n\n
+        adb connect 192.168.1.100\n\n
+        就可以连接并且调试了。\n\n
+        \n\n
+        注：在 CM 系应用中已经集成本开关，在开发者选项中勾选 adb over network 即可。\n
+    </string>
 </resources>
