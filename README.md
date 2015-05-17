@@ -1,4 +1,4 @@
-# DevMode
+# AirDebug
 
 Android adb over network toggle tool
 
