@@ -24,6 +24,11 @@ public class CommonUtil {
         Toast.makeText(context, "已经复制到剪切板", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 提示框
+     * @param context
+     * @param content
+     */
     public static void toast(Context context, String content) {
         Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
     }

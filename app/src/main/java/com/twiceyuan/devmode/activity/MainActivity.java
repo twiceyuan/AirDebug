@@ -74,7 +74,6 @@ public class MainActivity extends Activity implements Handler.Callback {
         registerReceiver(receiver, intentFilter);
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void updateStatus() {
         et_ip.setText(NetworkUtil.isWifiConnected(this) ? NetworkUtil.getIp() : "没有连接局域网");
         sw_net.setChecked(getNetStatus());

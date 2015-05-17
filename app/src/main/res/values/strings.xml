@@ -12,15 +12,15 @@
     <string name="title_activity_help">帮助</string>
 
     <string name="help_content">
-        帮助\n\n
-        本应用仅为 adb over network 的开启程序，如果用户在使用的 ROM 没有相关功能模块或者端口不同，则无法开启，可以尝试手动开启。\n\n
+        \n本应用仅为 adb over network 的开启程序，如果用户在使用的 ROM 没有相关功能模块或者端口不同，则无法开启，可以尝试手动开启。\n\n
 
-        开启网络调试并连接到局域网后，在编辑框里会显示当前设备在局域网中的 IP 地址（譬如192.168.1.100）。在开发设备的终端中输入：\n\n
-        adb connect mobile_ip\n\n
-        例如：\n\n
-        adb connect 192.168.1.100\n\n
-        就可以连接并且调试了。\n\n
+        \n开启网络调试并连接到局域网后，在编辑框里会显示当前设备在局域网中的 IP 地址（譬如192.168.1.100）。在开发设备的终端中输入：\n\n
+        \nadb connect mobile_ip\n\n
+        \n例如：\n\n
+        \nadb connect 192.168.1.100\n\n
+        \n就可以连接并且调试了。\n\n
         \n\n
-        注：在 CM 系应用中已经集成本开关，在开发者选项中勾选 adb over network 即可。\n
+        \n显示设置主要方便设置屏幕关闭时间。对于作者自己来说，无线调试最大的好处是跟模拟器一样无需连线，所以最好也跟模拟器一样无需点亮屏幕，因此把这个也加了进去。
+        \n注：在 CM 系应用中已经集成本开关，在开发者选项中勾选 adb over network 即可。\n
     </string>
 </resources>

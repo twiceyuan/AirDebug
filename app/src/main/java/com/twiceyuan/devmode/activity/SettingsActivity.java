@@ -41,18 +41,15 @@ public class SettingsActivity extends Activity {
                     RootManager rootManager = RootManager.getInstance();
                     // 在勾选时提醒获取 Root 权限
                     rootManager.obtainPermission();
+
                     app.setIsRootMode(true);
-                    CommonUtil.toast(getActivity(), "开启 Root 模式");
+                    CommonUtil.toast(getApplicationContext(), "开启 Root 模式");
                 } else {
                     app.setIsRootMode(false);
-                    CommonUtil.toast(getActivity(), "关闭 Root 模式");
+                    CommonUtil.toast(getApplicationContext(), "关闭 Root 模式");
                 }
             }
         });
-    }
-
-    public Activity getActivity() {
-        return this;
     }
 
     @Override

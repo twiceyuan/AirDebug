@@ -29,6 +29,11 @@ public class CommandUtil {
         this.mApplication = (BaseApplication) context;
     }
 
+    /**
+     * 执行系统命令
+     * @param command
+     * @return
+     */
     public String exec(String command) {
         if (mApplication.getIsRootMode()) {
             return RootManager.getInstance().runCommand(command).getMessage();
