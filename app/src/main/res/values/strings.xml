@@ -3,12 +3,12 @@
 
     <string name="turn_on">打开网络调试</string>
     <string name="turn_off">关闭网络调试</string>
-    <string name="net_status">网络调试状态</string>
-    <string name="turn_to_settings">显示设置</string>
+    <string name="debug_status">网络调试状态</string>
+    <string name="turn_to_settings">系统显示设置</string>
     <string name="title_activity_settings">设置</string>
     <string name="action_settings">设置</string>
-    <string name="tv_local_ip">本机 IP：</string>
-    <string name="show_help">查看帮助</string>
+    <string name="net_status">当前网络状态：</string>
+    <string name="show_help">查看应用帮助</string>
     <string name="title_activity_help">帮助</string>
 
     <string name="help_content">
@@ -23,4 +23,6 @@
         \n显示设置主要方便设置屏幕关闭时间。对于作者自己来说，无线调试最大的好处是跟模拟器一样无需连线，所以最好也跟模拟器一样无需点亮屏幕，因此把这个也加了进去。
         \n注：在 CM 系应用中已经集成本开关，在开发者选项中勾选 adb over network 即可。\n
     </string>
+    <string name="sample_ip">192.168.123.100</string>
+    <string name="click_prompt">点击复制或长按分享</string>
 </resources>

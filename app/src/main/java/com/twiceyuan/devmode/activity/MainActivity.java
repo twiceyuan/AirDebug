@@ -26,8 +26,9 @@ import com.twiceyuan.devmode.util.NetworkUtil;
 
 public class MainActivity extends Activity implements Handler.Callback {
 
-    EditText et_ip;
-    Switch sw_net;
+    private EditText et_ip;
+    private Switch sw_net;
+    private TextView tv_wifi_status;
 
     private Handler mHandler = new Handler(this);
     private WifiStateReceiver receiver = new WifiStateReceiver(mHandler);
@@ -41,21 +42,11 @@ public class MainActivity extends Activity implements Handler.Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        commandUtil = CommandUtil.newInstance((BaseApplication) getApplication());
+        commandUtil = CommandUtil.newInstance(getApplication());
 
         et_ip = (EditText) findViewById(R.id.et_ip);
         sw_net = (Switch) findViewById(R.id.sw_net);
-
-        sw_net.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    turn(true);
-                } else {
-                    turn(false);
-                }
-            }
-        });
+        tv_wifi_status = (TextView) findViewById(R.id.tv_wifi_status);
 
         et_ip.setKeyListener(null);
         et_ip.setOnClickListener(new View.OnClickListener() {
@@ -67,20 +58,46 @@ public class MainActivity extends Activity implements Handler.Callback {
             }
         });
 
+        et_ip.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String ip = et_ip.getText().toString().trim();
+                IntentUtil.shareIpAddress(
+                        MainActivity.this,
+                        "终端输入：\nadb connect " + ip + "\n连接设备");
+                return false;
+            }
+        });
+
         updateStatus();
 
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         intentFilter.setPriority(1000);
         registerReceiver(receiver, intentFilter);
+
+        sw_net.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    turn(true);
+                } else {
+                    turn(false);
+                }
+            }
+        });
     }
 
+    /**
+     * 更新网络状态，包括是否 Wi-Fi 连接，设备 IP 地址，是否开启网络调试
+     */
     private void updateStatus() {
-        et_ip.setText(NetworkUtil.isWifiConnected(this) ? NetworkUtil.getIp() : "没有连接局域网");
+        et_ip.setText(NetworkUtil.getIp());
         sw_net.setChecked(getNetStatus());
+        tv_wifi_status.setText(NetworkUtil.isWifiConnected(this) ? "Wi-Fi 连接中" : "Wi-Fi 没有连接");
     }
 
     private void turn(boolean isOn) {
-        String command = isOn? "setprop service.adb.tcp.port 5555":"setprop service.adb.tcp.port -1";
+        String command = isOn ? "setprop service.adb.tcp.port 5555" : "setprop service.adb.tcp.port -1";
 
         commandUtil.exec(command);
         commandUtil.exec("stop adbd");
@@ -99,7 +116,6 @@ public class MainActivity extends Activity implements Handler.Callback {
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -108,6 +124,7 @@ public class MainActivity extends Activity implements Handler.Callback {
 
     /**
      * 跳转到系统的显示设置（方便调整屏幕关闭时间，屏幕亮度等。因为非系统应用，没有修改系统设置权限）
+     *
      * @param view
      */
     public void turnToDisplaySettings(View view) {
@@ -116,6 +133,7 @@ public class MainActivity extends Activity implements Handler.Callback {
 
     /**
      * 跳转到帮助页面
+     *
      * @param view
      */
     public void showHelp(View view) {

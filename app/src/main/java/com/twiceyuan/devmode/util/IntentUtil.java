@@ -3,6 +3,7 @@ package com.twiceyuan.devmode.util;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Button;
 
 import com.twiceyuan.devmode.activity.HelpActivity;
 import com.twiceyuan.devmode.activity.SettingsActivity;
@@ -39,6 +40,18 @@ public class IntentUtil {
      */
     public static void showHelp(Context context) {
         Intent _intent = new Intent(context, HelpActivity.class);
+        context.startActivity(_intent);
+    }
+
+    /**
+     * 分享 IP 地址
+     * @param ipAddress 需要分享的 IP 地址
+     */
+    public static void shareIpAddress(Context context, String ipAddress) {
+        Intent _intent = new Intent();
+        _intent.setAction(Intent.ACTION_SEND);
+        _intent.putExtra(Intent.EXTRA_TEXT, ipAddress);
+        _intent.setType("text/plain");
         context.startActivity(_intent);
     }
 }
