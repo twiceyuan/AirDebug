@@ -2,7 +2,7 @@
 
 Android adb over network toggle tool
 
-一个打开网络调试的小工具，需要 Root 权限（用于执行系统命令）
+一个打开网络调试的小工具，部分系统（例如 MIUI）需要 Root 权限
 
 ## 使用方法
 
