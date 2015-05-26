@@ -1,12 +1,17 @@
 package com.twiceyuan.devmode.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.util.Log;
 
 import org.apache.http.conn.util.InetAddressUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -35,9 +40,10 @@ public class NetworkUtil {
 
                     InetAddress ip = inet.nextElement();
 
+                    Log.i("NIC", "NIC => " + nif.getDisplayName() + ",IP => " + ip.getHostAddress());
                     if (!ip.isLoopbackAddress() &&
                             InetAddressUtils.isIPv4Address(ip.getHostAddress()) &&
-                            nif.getDisplayName().contains("wlan")) {
+                            nif.getDisplayName().contains("wlan0")) {
                         ipaddress = ip.getHostAddress();
                         return ipaddress;
                     }
@@ -56,16 +62,34 @@ public class NetworkUtil {
      * @param context
      * @return
      */
-    public static boolean isWifiConnected(Context context) {
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static String getNetworkState(Context context) {
+
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mWiFiNetworkInfo = mConnectivityManager
                     .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             if (mWiFiNetworkInfo != null) {
-                return mWiFiNetworkInfo.isConnected();
+                if (mWiFiNetworkInfo.isConnected()) {
+                    return "Wi-Fi 网络连接中";
+                }
+            }
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            Method method;
+            int apState = 0;
+            try {
+                method = wifiManager.getClass().getMethod("getWifiApState");
+                apState = (int) method.invoke(wifiManager);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            Log.i("NetStatus", "NetState => " + apState);
+            if (apState == 13) {
+                return "热点共享中";
             }
         }
-        return false;
+        return "无局域网连接";
     }
 }

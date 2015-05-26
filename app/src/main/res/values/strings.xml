@@ -7,7 +7,7 @@
     <string name="turn_to_settings">系统显示设置</string>
     <string name="title_activity_settings">设置</string>
     <string name="action_settings">设置</string>
-    <string name="net_status">当前网络状态：</string>
+    <string name="net_status">当前网络状态</string>
     <string name="show_help">查看应用帮助</string>
     <string name="title_activity_help">帮助</string>
 
@@ -25,4 +25,8 @@
     </string>
     <string name="sample_ip">192.168.123.100</string>
     <string name="click_prompt">点击复制或长按分享</string>
+    <string name="sw_root_prompt">开启 Root 模式（解决部分机型不兼容）</string>
+    <string name="sw_notification_prompt">调试开启时显示通知</string>
+    <string name="sw_root_title">Root模式</string>
+    <string name="sw_notification_title">开启通知</string>
 </resources>

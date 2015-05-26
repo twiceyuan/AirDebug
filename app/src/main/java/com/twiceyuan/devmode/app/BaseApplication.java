@@ -11,6 +11,7 @@ public class BaseApplication extends Application {
 
     private SharedPreferences sp;
     private static final String KEY_MODE = "mode";
+    private static final String KEY_NOTIFICATION = "notification";
 
     @Override
     public void onCreate() {
@@ -34,5 +35,23 @@ public class BaseApplication extends Application {
      */
     public boolean getIsRootMode() {
         return sp.getBoolean(KEY_MODE, false);
+    }
+
+    /**
+     * 设置是否显示通知
+     * @param isShowNotification
+     */
+    public void setShowNotification(boolean isShowNotification) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(KEY_NOTIFICATION, isShowNotification);
+        editor.apply();
+    }
+
+    /**
+     * 获得是否显示通知设置
+     * @return
+     */
+    public boolean getIsShowNotification() {
+        return sp.getBoolean(KEY_NOTIFICATION, true);
     }
 }

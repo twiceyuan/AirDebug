@@ -23,6 +23,7 @@ import com.twiceyuan.devmode.util.CommandUtil;
 import com.twiceyuan.devmode.util.CommonUtil;
 import com.twiceyuan.devmode.util.IntentUtil;
 import com.twiceyuan.devmode.util.NetworkUtil;
+import com.twiceyuan.devmode.util.NotificationUtil;
 
 public class MainActivity extends Activity implements Handler.Callback {
 
@@ -34,8 +35,10 @@ public class MainActivity extends Activity implements Handler.Callback {
     private WifiStateReceiver receiver = new WifiStateReceiver(mHandler);
 
     public static final int NETWORK_STATE_CHANGED = 1;
+    public static final String NETWORK_AP_STATE_CHANGED = "android.net.wifi.WIFI_AP_STATE_CHANGED";
 
     private CommandUtil commandUtil;
+    private NotificationUtil notificationUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class MainActivity extends Activity implements Handler.Callback {
         setContentView(R.layout.activity_main);
 
         commandUtil = CommandUtil.newInstance(getApplication());
+        notificationUtil = NotificationUtil.newInstance(getApplication());
 
         et_ip = (EditText) findViewById(R.id.et_ip);
         sw_net = (Switch) findViewById(R.id.sw_net);
@@ -71,16 +75,24 @@ public class MainActivity extends Activity implements Handler.Callback {
 
         updateStatus();
 
-        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        intentFilter.setPriority(1000);
-        registerReceiver(receiver, intentFilter);
+        IntentFilter wifiIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        IntentFilter apIntentFilter = new IntentFilter(NETWORK_AP_STATE_CHANGED);
+
+        wifiIntentFilter.setPriority(1000);
+        apIntentFilter.setPriority(1000);
+
+        registerReceiver(receiver, wifiIntentFilter);
+        registerReceiver(receiver, apIntentFilter);
 
         sw_net.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    notificationUtil.showNotification();
                     turn(true);
                 } else {
+                    notificationUtil.closeNotification();
                     turn(false);
                 }
             }
@@ -92,8 +104,17 @@ public class MainActivity extends Activity implements Handler.Callback {
      */
     private void updateStatus() {
         et_ip.setText(NetworkUtil.getIp());
-        sw_net.setChecked(getNetStatus());
-        tv_wifi_status.setText(NetworkUtil.isWifiConnected(this) ? "Wi-Fi 连接中" : "Wi-Fi 没有连接");
+        sw_net.setChecked(getNetDebugStatus());
+
+        tv_wifi_status.setText(NetworkUtil.getNetworkState(this));
+        boolean isNotificationOpen = ((BaseApplication) getApplication()).getIsShowNotification();
+        boolean isNetDebugOpen = getNetDebugStatus();
+
+        if (isNetDebugOpen && isNotificationOpen) {
+            notificationUtil.showNotification();
+        } else {
+            notificationUtil.closeNotification();
+        }
     }
 
     private void turn(boolean isOn) {
@@ -110,7 +131,7 @@ public class MainActivity extends Activity implements Handler.Callback {
      *
      * @return 是否网络调试
      */
-    public boolean getNetStatus() {
+    public boolean getNetDebugStatus() {
         String result = commandUtil.exec("getprop service.adb.tcp.port");
         return result.contains("5555");
     }
