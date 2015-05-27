@@ -29,4 +29,6 @@
     <string name="sw_notification_prompt">调试开启时显示通知</string>
     <string name="sw_root_title">Root模式</string>
     <string name="sw_notification_title">开启通知</string>
+    <string name="action_display_settings">系统显示设置</string>
+    <string name="action_help">帮助</string>
 </resources>

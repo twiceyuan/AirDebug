@@ -33,4 +33,5 @@ public class HelpActivity extends Activity {
         }
         return false;
     }
+
 }

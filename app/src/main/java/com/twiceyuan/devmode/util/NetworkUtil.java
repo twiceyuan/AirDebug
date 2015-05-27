@@ -24,7 +24,7 @@ public class NetworkUtil {
     /**
      * 获得 IP
      *
-     * @return
+     * @return ip
      */
     public static String getIp() {
         String ipaddress = "";
@@ -63,6 +63,7 @@ public class NetworkUtil {
      * @return
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Deprecated
     public static String getNetworkState(Context context) {
 
         if (context != null) {
