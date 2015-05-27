@@ -58,6 +58,7 @@ public class MainActivity extends Activity implements Handler.Callback {
          */
         registerReceiver(receiver, StateConfig.wifiIntentFilter);
         registerReceiver(receiver, StateConfig.apIntentFilter);
+        registerReceiver(receiver, StateConfig.adbIntentFilter);
 
         /**
          * IP 不可编辑
@@ -100,11 +101,9 @@ public class MainActivity extends Activity implements Handler.Callback {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    notificationUtil.showNotification();
                     mAdbUtil.openAirDebug();
 
                 } else {
-                    notificationUtil.closeNotification();
                     mAdbUtil.closeAirDebug();
                 }
             }
@@ -118,7 +117,10 @@ public class MainActivity extends Activity implements Handler.Callback {
         et_ip.setText(NetworkUtil.getIp());
         sw_debug.setChecked(mAdbUtil.getAirDebugState());
 
-        tv_wifi_status.setText(NetworkUtil.getNetworkState(this));
+        // 获取 WiFi 状态
+        int wifiState = NetworkUtil.isWifiConnected(this) ?
+                StateConfig.WIFI_CONNECTED: StateConfig.NO_CONNECTION;
+        tv_wifi_status.setText(StateConfig.networkState.get(wifiState));
 
         /**
          * 获得配置中的通知设置以决定是否显示通知

@@ -63,8 +63,7 @@ public class NetworkUtil {
      * @return
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    @Deprecated
-    public static String getNetworkState(Context context) {
+    public static boolean isWifiConnected(Context context) {
 
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context
@@ -73,24 +72,10 @@ public class NetworkUtil {
                     .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             if (mWiFiNetworkInfo != null) {
                 if (mWiFiNetworkInfo.isConnected()) {
-                    return "Wi-Fi 网络连接中";
+                    return true;
                 }
             }
-            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            Method method;
-            int apState = 0;
-            try {
-                method = wifiManager.getClass().getMethod("getWifiApState");
-                apState = (int) method.invoke(wifiManager);
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            Log.i("NetStatus", "NetState => " + apState);
-            if (apState == 13) {
-                return "热点共享中";
-            }
         }
-        return "无局域网连接";
+        return false;
     }
 }

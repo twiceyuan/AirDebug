@@ -36,7 +36,6 @@ public interface StateConfig {
         put(NO_CONNECTION, "无局域网络");
         put(WIFI_CONNECTED, "Wi-Fi 连接中");
         put(10, "无局域网络");
-        put(11, "无局域网络");
         put(12, "AP共享开启");
         put(13, "AP共享开启");
     }};

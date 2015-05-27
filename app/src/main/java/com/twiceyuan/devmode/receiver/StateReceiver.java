@@ -65,6 +65,9 @@ public class StateReceiver extends BroadcastReceiver {
             Message message = new Message();
             message.arg1 = intent.getIntExtra(StateConfig.KEY_AP_STATE_VALUE, 0);
             message.what = StateConfig.MSG_NETWORK_STATE_CHANGED;
+
+            if (message.arg1 == 11) return;
+
             mHandler.sendMessage(message);
         }
 
