@@ -75,14 +75,6 @@ public class MainActivity extends Activity implements OnUpdateListener {
         initStatus();
 
         /**
-         * 注册网络状态广播接收器
-         * （修改为服务注册）
-         */
-//        registerReceiver(receiver, StateConfig.wifiIntentFilter);
-//        registerReceiver(receiver, StateConfig.apIntentFilter);
-//        registerReceiver(receiver, StateConfig.adbIntentFilter);
-
-        /**
          * IP 不可编辑
          */
         et_ip.setKeyListener(null);
@@ -129,6 +121,12 @@ public class MainActivity extends Activity implements OnUpdateListener {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initStatus();
     }
 
     /**

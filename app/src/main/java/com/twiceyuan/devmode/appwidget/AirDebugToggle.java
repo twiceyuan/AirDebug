@@ -56,6 +56,10 @@ public class AirDebugToggle extends AppWidgetProvider {
                 updateAirDebugState(context, true);
             }
         }
+
+        if (intent.getAction().equals(StateConfig.WIDGET_UPDATE_ACTION)) {
+            updateAirDebugState(context, adbUtil.getAirDebugState());
+        }
     }
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,

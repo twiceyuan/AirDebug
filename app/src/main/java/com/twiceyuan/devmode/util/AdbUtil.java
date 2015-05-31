@@ -62,5 +62,12 @@ public class AdbUtil {
         _intent.setAction(StateConfig.ADB_OVER_NETWORK_STATE_CHANGED_ACTION);
         _intent.putExtra(StateConfig.KEY_ADB_OVER_NETWORK_STATE, isOn);
         mContext.sendBroadcast(_intent);
+
+        /**
+         * 发送桌面控件状态广播
+         */
+        Intent _intent2 = new Intent();
+        _intent2.setAction(StateConfig.WIDGET_UPDATE_ACTION);
+        mContext.sendBroadcast(_intent2);
     }
 }
