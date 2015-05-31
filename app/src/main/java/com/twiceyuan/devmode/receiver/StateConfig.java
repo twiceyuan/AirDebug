@@ -16,6 +16,8 @@ public interface StateConfig {
 
     /** 自定义广播：ADB Over Network 状态发生改变 */
     String ADB_OVER_NETWORK_STATE_CHANGED_ACTION = "com.twiceyuan.devmode.ADB_OVER_NETWORK_STATE_CHANGED_ACTION";
+    String WIDGET_UPDATE_ACTION = "android.appwidget.action.APPWIDGET_UPDATE";
+    String WIDGET_CLICK_ACTION = "android.appwidget.action.APPWIDGET_ONCLICK";
 
     String KEY_ADB_OVER_NETWORK_STATE = "state"; // ADB 状态
     String KEY_AP_STATE_VALUE = "wifi_state"; // wifi 状态，从广播的 Intent 中获得

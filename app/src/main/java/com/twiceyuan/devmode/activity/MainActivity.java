@@ -2,11 +2,15 @@ package com.twiceyuan.devmode.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,29 +21,46 @@ import android.widget.TextView;
 
 import com.twiceyuan.devmode.R;
 import com.twiceyuan.devmode.receiver.StateConfig;
-import com.twiceyuan.devmode.receiver.StateReceiver;
+import com.twiceyuan.devmode.service.AirDebugService;
+import com.twiceyuan.devmode.service.OnUpdateListener;
 import com.twiceyuan.devmode.util.AdbUtil;
 import com.twiceyuan.devmode.util.CommonUtil;
 import com.twiceyuan.devmode.util.IntentUtil;
 import com.twiceyuan.devmode.util.NetworkUtil;
 import com.twiceyuan.devmode.util.NotificationUtil;
 
-public class MainActivity extends Activity implements Handler.Callback {
+public class MainActivity extends Activity implements OnUpdateListener {
 
     private EditText et_ip;
     private Switch sw_debug;
     private TextView tv_wifi_status;
 
-    private Handler mHandler = new Handler(this);
-    private StateReceiver receiver = new StateReceiver(mHandler);
-
     private AdbUtil mAdbUtil;
     private NotificationUtil notificationUtil;
+
+    private AirDebugService mService;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = ((AirDebugService.MainBinder) service).getService();
+            mService.initReceiver();
+            mService.setListener(MainActivity.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent _intent = new Intent(this, AirDebugService.class);
+        startService(_intent);
+
+        bindService(_intent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
         mAdbUtil = AdbUtil.newInstance(getApplication());
         notificationUtil = NotificationUtil.newInstance(getApplication());
@@ -55,10 +76,11 @@ public class MainActivity extends Activity implements Handler.Callback {
 
         /**
          * 注册网络状态广播接收器
+         * （修改为服务注册）
          */
-        registerReceiver(receiver, StateConfig.wifiIntentFilter);
-        registerReceiver(receiver, StateConfig.apIntentFilter);
-        registerReceiver(receiver, StateConfig.adbIntentFilter);
+//        registerReceiver(receiver, StateConfig.wifiIntentFilter);
+//        registerReceiver(receiver, StateConfig.apIntentFilter);
+//        registerReceiver(receiver, StateConfig.adbIntentFilter);
 
         /**
          * IP 不可编辑
@@ -102,7 +124,6 @@ public class MainActivity extends Activity implements Handler.Callback {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mAdbUtil.openAirDebug();
-
                 } else {
                     mAdbUtil.closeAirDebug();
                 }
@@ -136,37 +157,17 @@ public class MainActivity extends Activity implements Handler.Callback {
     protected void onDestroy() {
         super.onDestroy();
         // 注销监听器
-        unregisterReceiver(receiver);
+//        unregisterReceiver(receiver);
     }
 
     @Override
-    public boolean handleMessage(Message msg) {
-
-        Log.i("Message", "msg number => " + msg.what);
-        Log.i("Message", "arg number => " + msg.arg1);
-        switch (msg.what) {
-
+    public void updateViews(int updateId, int state) {
+        switch (updateId) {
             case StateConfig.MSG_NETWORK_STATE_CHANGED:
-
-                int state = msg.arg1;
-
                 tv_wifi_status.setText(StateConfig.networkState.get(state));
                 et_ip.setText(NetworkUtil.getIp());
                 break;
-
-            case StateConfig.MSG_ADB_STATE_CHANGED:
-                // adb over network 是否开启
-                int adbState = msg.arg1;
-
-                if (adbState == StateConfig.ADB_STATE_ON) {
-                    notificationUtil.showNotification();
-                } else {
-                    notificationUtil.closeNotification();
-                }
-                break;
         }
-
-        return false;
     }
 
     @Override
