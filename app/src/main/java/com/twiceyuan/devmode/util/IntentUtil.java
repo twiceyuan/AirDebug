@@ -1,9 +1,10 @@
 package com.twiceyuan.devmode.util;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
+import android.webkit.WebView;
 
 import com.twiceyuan.devmode.activity.HelpActivity;
 import com.twiceyuan.devmode.activity.SettingsActivity;
@@ -15,11 +16,12 @@ public class IntentUtil {
 
     /**
      * 跳转到现实设置
+     *
      * @param context
      */
     public static void turnToDisplaySettings(Context context) {
         Intent intent = new Intent("/");
-        ComponentName cm = new ComponentName("com.android.settings","com.android.settings.DisplaySettings");
+        ComponentName cm = new ComponentName("com.android.settings", "com.android.settings.DisplaySettings");
         intent.setComponent(cm);
         intent.setAction("android.intent.action.VIEW");
         context.startActivity(intent);
@@ -27,6 +29,7 @@ public class IntentUtil {
 
     /**
      * 跳转到设置界面
+     *
      * @param context
      */
     public static void settings(Context context) {
@@ -36,6 +39,7 @@ public class IntentUtil {
 
     /**
      * 跳转到帮助页面
+     *
      * @param context
      */
     public static void showHelp(Context context) {
@@ -45,6 +49,7 @@ public class IntentUtil {
 
     /**
      * 分享 IP 地址
+     *
      * @param ipAddress 需要分享的 IP 地址
      */
     public static void shareIpAddress(Context context, String ipAddress) {
@@ -53,5 +58,17 @@ public class IntentUtil {
         _intent.putExtra(Intent.EXTRA_TEXT, ipAddress);
         _intent.setType("text/plain");
         context.startActivity(_intent);
+    }
+
+    /**
+     * 关于对话框
+     */
+    public static void aboutDialog(Context context) {
+        WebView webView = new WebView(context);
+        webView.loadUrl("file:///android_asset/about.html");
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(webView);
+        builder.setPositiveButton(context.getResources().getString(android.R.string.ok), null);
+        builder.show();
     }
 }

@@ -33,6 +33,8 @@
 
         <receiver android:name=".appwidget.AirDebugToggle" >
             <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_ONCLICK" />
             </intent-filter>
@@ -42,8 +44,14 @@
                 android:resource="@xml/air_debug_toggle_info" />
         </receiver>
 
+        <receiver
+            android:name=".receiver.AdbReceiver"
+            android:enabled="true"
+            android:exported="true"/>
+
         <service
             android:name=".service.AirDebugService"
+            android:stopWithTask="false"
             android:enabled="true"
             android:exported="true">
         </service>

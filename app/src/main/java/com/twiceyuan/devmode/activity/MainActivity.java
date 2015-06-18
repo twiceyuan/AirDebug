@@ -8,9 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,7 +56,6 @@ public class MainActivity extends Activity implements OnUpdateListener {
         setContentView(R.layout.activity_main);
 
         Intent _intent = new Intent(this, AirDebugService.class);
-        startService(_intent);
 
         bindService(_intent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
@@ -152,13 +149,6 @@ public class MainActivity extends Activity implements OnUpdateListener {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 注销监听器
-//        unregisterReceiver(receiver);
-    }
-
-    @Override
     public void updateViews(int updateId, int state) {
         switch (updateId) {
             case StateConfig.MSG_NETWORK_STATE_CHANGED:
@@ -194,6 +184,12 @@ public class MainActivity extends Activity implements OnUpdateListener {
          */
         if (menuId == R.id.action_help) {
             IntentUtil.showHelp(this);
+        }
+        /**
+         * 关于信息
+         */
+        if (menuId == R.id.action_about) {
+            IntentUtil.aboutDialog(this);
         }
         return false;
     }

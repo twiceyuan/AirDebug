@@ -24,6 +24,7 @@
     <string name="loading">loading...</string>
     <string name="help_usage">关于使用</string>
     <string name="help_widget_and_service">桌面控件与后台服务</string>
+    <string name="todo">// TODO add about message</string>
     <string name="help_content">
         \n本应用仅为 adb over network 的开启程序，如果用户在使用的 ROM 没有相关功能模块或者端口不同，则无法开启，可以尝试手动开启。\n\n
 
@@ -42,4 +43,5 @@
         \n这是因为本应用没有让服务跑在单独的线程中，也没有使用任何保护服务非正常情况下保持运行的方法。如果你需要它一直保持运行的话，建议你根据系统安全工具的配置让它保持后台运行。
         \n如果你觉得通知无可厚非，可以在设置中关闭通知。这样桌面控件也可以正常使用。
     </string>
+    <string name="action_about">关于</string>
 </resources>

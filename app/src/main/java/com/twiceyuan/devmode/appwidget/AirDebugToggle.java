@@ -81,6 +81,7 @@ public class AirDebugToggle extends AppWidgetProvider {
 
     /**
      * 更新 Widget 状态信息
+     *
      * @param context
      * @param isTurnOn 是否为打开操作
      */

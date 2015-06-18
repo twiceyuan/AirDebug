@@ -16,6 +16,9 @@ public class StateReceiver extends BroadcastReceiver {
     public StateReceiver(Handler callback) {
         mHandler = callback;
     }
+    public StateReceiver() {
+
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -44,14 +47,18 @@ public class StateReceiver extends BroadcastReceiver {
                 if (mWiFiNetworkInfo.isConnected()) {
                     // Wi-Fi 正在连接
                     message.arg1 = StateConfig.WIFI_CONNECTED;
-                    mHandler.sendMessage(message);
+                    if (mHandler != null) {
+                        mHandler.sendMessage(message);
+                    }
                     return;
                 }
             }
 
             // 无 Wi-Fi 连接
             message.arg1 = StateConfig.NO_CONNECTION;
-            mHandler.sendMessage(message);
+            if (mHandler != null) {
+                mHandler.sendMessage(message);
+            }
         }
 
         /**
@@ -68,7 +75,9 @@ public class StateReceiver extends BroadcastReceiver {
 
             if (message.arg1 == 11) return;
 
-            mHandler.sendMessage(message);
+            if (mHandler != null) {
+                mHandler.sendMessage(message);
+            }
         }
 
         /**

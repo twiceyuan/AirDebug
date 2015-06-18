@@ -43,7 +43,7 @@ public class NotificationUtil {
         PendingIntent pIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
         mNotification = new Notification.Builder(mContext)
                 .setContentTitle("网络调试")
-                .setContentText("网络调试已开启")
+                .setContentText("IP: " + NetworkUtil.getIp())
                 .setContentIntent(pIntent)
                 .setSmallIcon(R.drawable.ic_stat_debug)
                 .build();
